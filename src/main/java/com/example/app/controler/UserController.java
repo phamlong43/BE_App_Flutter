@@ -259,4 +259,63 @@ public class UserController {
         userRepository.save(user);
         return ResponseEntity.ok("User updated successfully");
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> payload) {
+        String username = payload.get("username");
+        String oldPassword = payload.get("oldPassword");
+        String newPassword = payload.get("newPassword");
+        if (username == null || oldPassword == null || newPassword == null) {
+            return ResponseEntity.badRequest().body("Missing required fields");
+        }
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        User user = userOpt.get();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity.badRequest().body("Old password is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return ResponseEntity.ok("Password changed successfully");
+    }
+
+    @GetMapping({"", "/"})
+    public ResponseEntity<?> getAllUsers() {
+        var users = userRepository.findAll();
+        var result = new java.util.ArrayList<Map<String, Object>>();
+        for (User user : users) {
+            Map<String, Object> item = new java.util.HashMap<>();
+            item.put("id", user.getId());
+            item.put("username", user.getUsername());
+            item.put("email", user.getEmail());
+            item.put("role", user.getRole());
+            item.put("full_name", user.getFullName());
+            item.put("employee_code", user.getEmployeeCode());
+            item.put("gender", user.getGender() != null ? user.getGender().name() : null);
+            item.put("date_of_birth", user.getDateOfBirth());
+            item.put("address", user.getAddress());
+            item.put("created_at", user.getCreatedAt());
+            item.put("updated_at", user.getUpdatedAt());
+            item.put("mobile", user.getMobile());
+            item.put("phone", user.getPhone());
+            item.put("place_of_birth", user.getPlaceOfBirth());
+            item.put("id_number", user.getIdNumber());
+            item.put("id_issued_place", user.getIdIssuedPlace());
+            item.put("id_issued_date", user.getIdIssuedDate());
+            item.put("ethnicity", user.getEthnicity());
+            item.put("religion", user.getReligion());
+            item.put("nationality", user.getNationality());
+            item.put("marital_status", user.getMaritalStatus());
+            item.put("education", user.getEducation());
+            item.put("permanent_address", user.getPermanentAddress());
+            item.put("temporary_address", user.getTemporaryAddress());
+            item.put("department", user.getDepartment());
+            item.put("position", user.getPosition());
+            item.put("work_status", user.getWorkStatus());
+            result.add(item);
+        }
+        return ResponseEntity.ok(result);
+    }
 }
