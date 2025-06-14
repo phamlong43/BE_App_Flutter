@@ -109,4 +109,33 @@ public class TaskController {
         }
         return ResponseEntity.ok(result);
     }
+
+    // API cho user cập nhật trạng thái task (hoàn thành hoặc không thể hoàn thành)
+    @PostMapping("/update-status")
+    public ResponseEntity<?> updateTaskStatus(@RequestBody Map<String, Object> payload) {
+        Long taskId;
+        String status;
+        String username;
+        try {
+            taskId = Long.valueOf(payload.get("taskId").toString());
+            status = payload.get("status").toString();
+            username = payload.get("username").toString();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Missing or invalid taskId, status, or username");
+        }
+        if (!status.equalsIgnoreCase("completed") && !status.equalsIgnoreCase("failed")) {
+            return ResponseEntity.badRequest().body("Status must be 'completed' or 'failed'");
+        }
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+        if (taskOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Task not found");
+        }
+        Task task = taskOpt.get();
+        if (!task.getUser().getUsername().equals(username)) {
+            return ResponseEntity.status(403).body("You do not have permission to update this task");
+        }
+        task.setStatus(status.toLowerCase());
+        taskRepository.save(task);
+        return ResponseEntity.ok("Task status updated successfully");
+    }
 }
