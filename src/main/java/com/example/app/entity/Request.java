@@ -3,6 +3,7 @@ package com.example.app.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Request {
@@ -12,6 +13,7 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)

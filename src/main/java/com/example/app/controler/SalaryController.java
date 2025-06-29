@@ -1,24 +1,19 @@
 package com.example.app.controler;
 
 import com.example.app.entity.Salary;
-import com.example.app.entity.User;
 import com.example.app.repository.SalaryRepository;
-import com.example.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/salaries")
 public class SalaryController {
     @Autowired
     private SalaryRepository salaryRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping
     public List<Salary> getAll() {
@@ -26,7 +21,7 @@ public class SalaryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable Integer id) {
         return salaryRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -34,24 +29,19 @@ public class SalaryController {
 
     @PostMapping
     public ResponseEntity<?> createSalary(@RequestBody Salary salary) {
-        if (salary.getUser() == null || salary.getUser().getId() == null) {
+        if (salary.getUserId() == null) {
             return ResponseEntity.badRequest().body("User ID is required");
         }
-        Optional<User> userOpt = userRepository.findById(salary.getUser().getId());
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("User not found");
-        }
-        salary.setUser(userOpt.get());
         salary.setTotalSalary(calcTotalSalary(salary));
         Salary saved = salaryRepository.save(salary);
         return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSalary(@PathVariable Long id, @RequestBody Salary salary) {
+    public ResponseEntity<?> updateSalary(@PathVariable Integer id, @RequestBody Salary salary) {
         return salaryRepository.findById(id).map(existing -> {
             salary.setId(id);
-            salary.setUser(existing.getUser()); // Không cho phép đổi user
+            salary.setUserId(existing.getUserId()); // Không cho phép đổi userId
             salary.setTotalSalary(calcTotalSalary(salary));
             Salary updated = salaryRepository.save(salary);
             return ResponseEntity.ok(updated);
@@ -59,7 +49,7 @@ public class SalaryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSalary(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSalary(@PathVariable Integer id) {
         if (!salaryRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -76,4 +66,3 @@ public class SalaryController {
         return basic.add(allowance).add(bonus).add(overtime).subtract(deduction);
     }
 }
-

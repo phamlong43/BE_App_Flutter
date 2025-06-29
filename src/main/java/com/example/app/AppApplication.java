@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import com.example.app.entity.User;
 import com.example.app.repository.UserRepository;
+import com.example.app.entity.Conversation;
+import com.example.app.repository.ConversationRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
@@ -16,7 +18,7 @@ public class AppApplication {
 	}
 
 	@Bean
-	CommandLineRunner initAdmin(UserRepository userRepository) {
+	CommandLineRunner initAdmin(UserRepository userRepository, ConversationRepository conversationRepository) {
 		return args -> {
 			if (userRepository.count() == 0) {
 				User admin = new User();
@@ -48,6 +50,13 @@ public class AppApplication {
 				userRepository.save(admin);
 				System.out.println("Admin account created: admin/admin");
 			}
+		};
+	}
+
+	@Bean
+	CommandLineRunner initSampleConversations(ConversationRepository conversationRepository, com.example.app.repository.ChatMessageRepository chatMessageRepository) {
+		return args -> {
+			// Không tạo cuộc hội thoại và tin nhắn mẫu nữa
 		};
 	}
 

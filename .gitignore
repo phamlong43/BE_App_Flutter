@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### MySQL runtime files ###
+mysql/*.sock
+mysql/*.pid
+mysql/ib_logfile*
+mysql/ibdata*
+mysql/#*
+mysql/*.err
+mysql/*.frm
+mysql/*.MYD
+mysql/*.MYI

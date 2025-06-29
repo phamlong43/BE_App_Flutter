@@ -5,61 +5,39 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "salary", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "month_year"}))
+@Table(name = "salary")
 public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Integer userId;
 
-    @Column(name = "month_year", nullable = false, length = 7)
     private String monthYear;
 
-    @Column(name = "basic_salary", nullable = false, precision = 15, scale = 2)
     private BigDecimal basicSalary;
 
-    @Column(name = "allowance", precision = 15, scale = 2)
-    private BigDecimal allowance = BigDecimal.ZERO;
+    private BigDecimal allowance;
 
-    @Column(name = "bonus", precision = 15, scale = 2)
-    private BigDecimal bonus = BigDecimal.ZERO;
+    private BigDecimal bonus;
 
-    @Column(name = "deduction", precision = 15, scale = 2)
-    private BigDecimal deduction = BigDecimal.ZERO;
+    private BigDecimal deduction;
 
-    @Column(name = "overtime_salary", precision = 15, scale = 2)
-    private BigDecimal overtimeSalary = BigDecimal.ZERO;
+    private BigDecimal overtimeSalary;
 
-    @Column(name = "total_salary", nullable = false, precision = 15, scale = 2)
     private BigDecimal totalSalary;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private Status status = Status.pending;
+    private String status;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
-
-    public enum Status {
-        pending, paid
-    }
+    private LocalDateTime updatedAt;
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
     public String getMonthYear() { return monthYear; }
     public void setMonthYear(String monthYear) { this.monthYear = monthYear; }
     public BigDecimal getBasicSalary() { return basicSalary; }
@@ -74,8 +52,8 @@ public class Salary {
     public void setOvertimeSalary(BigDecimal overtimeSalary) { this.overtimeSalary = overtimeSalary; }
     public BigDecimal getTotalSalary() { return totalSalary; }
     public void setTotalSalary(BigDecimal totalSalary) { this.totalSalary = totalSalary; }
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

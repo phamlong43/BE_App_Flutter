@@ -1,9 +1,9 @@
 package com.example.app.controler;
 
 import com.example.app.entity.Request;
-import com.example.app.entity.User;
 import com.example.app.repository.RequestRepository;
 import com.example.app.repository.UserRepository;
+import com.example.app.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
