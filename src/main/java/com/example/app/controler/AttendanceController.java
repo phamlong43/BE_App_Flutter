@@ -46,11 +46,10 @@ public class AttendanceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAttendance(@PathVariable Long id, @RequestBody Attendance attendance) {
+    public ResponseEntity<?> updateCheckOut(@PathVariable Long id, @RequestBody Attendance attendance) {
         return attendanceRepository.findById(id).map(existing -> {
-            attendance.setId(id);
-            attendance.setUser(existing.getUser()); // User cannot be changed
-            Attendance updated = attendanceRepository.save(attendance);
+            existing.setCheckOut(attendance.getCheckOut());
+            Attendance updated = attendanceRepository.save(existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());
     }
@@ -63,5 +62,10 @@ public class AttendanceController {
         attendanceRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
-}
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getByUserId(@PathVariable Long userId) {
+        List<Attendance> attendances = attendanceRepository.findByUser_Id(userId);
+        return ResponseEntity.ok(attendances);
+    }
+}

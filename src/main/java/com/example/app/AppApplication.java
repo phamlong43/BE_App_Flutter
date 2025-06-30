@@ -47,6 +47,7 @@ public class AppApplication {
 				admin.setDepartment("");
 				admin.setPosition("");
 				admin.setWorkStatus("");
+				// Nếu User entity có trường mới, hãy bổ sung set ở đây
 				userRepository.save(admin);
 				System.out.println("Admin account created: admin/admin");
 			}
