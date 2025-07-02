@@ -318,4 +318,42 @@ public class UserController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            Map<String, Object> result = new java.util.HashMap<>();
+            result.put("id", user.getId());
+            result.put("username", user.getUsername());
+            result.put("email", user.getEmail());
+            result.put("role", user.getRole());
+            result.put("full_name", user.getFullName());
+            result.put("employee_code", user.getEmployeeCode());
+            result.put("gender", user.getGender() != null ? user.getGender().name() : null);
+            result.put("date_of_birth", user.getDateOfBirth());
+            result.put("address", user.getAddress());
+            result.put("created_at", user.getCreatedAt());
+            result.put("updated_at", user.getUpdatedAt());
+            result.put("mobile", user.getMobile());
+            result.put("phone", user.getPhone());
+            result.put("place_of_birth", user.getPlaceOfBirth());
+            result.put("id_number", user.getIdNumber());
+            result.put("id_issued_place", user.getIdIssuedPlace());
+            result.put("id_issued_date", user.getIdIssuedDate());
+            result.put("ethnicity", user.getEthnicity());
+            result.put("religion", user.getReligion());
+            result.put("nationality", user.getNationality());
+            result.put("marital_status", user.getMaritalStatus());
+            result.put("education", user.getEducation());
+            result.put("permanent_address", user.getPermanentAddress());
+            result.put("temporary_address", user.getTemporaryAddress());
+            result.put("department", user.getDepartment());
+            result.put("position", user.getPosition());
+            result.put("work_status", user.getWorkStatus());
+            return ResponseEntity.ok(result);
+        }
+        return ResponseEntity.status(404).body("User not found");
+    }
 }

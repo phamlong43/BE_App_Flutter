@@ -64,8 +64,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getByUserId(@PathVariable Long userId) {
-        List<Attendance> attendances = attendanceRepository.findByUser_Id(userId);
-        return ResponseEntity.ok(attendances);
+    public List<Attendance> getByUserId(@PathVariable Long userId) {
+        return attendanceRepository.findByUser_Id(userId);
     }
 }
