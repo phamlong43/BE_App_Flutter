@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +26,22 @@ public class RewardDisciplineController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         Optional<RewardDiscipline> result = rewardDisciplineRepository.findById(id);
-        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (result.isPresent()) {
+            RewardDiscipline rd = result.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", rd.getId());
+            response.put("employeeId", rd.getEmployeeId());
+            response.put("type", rd.getType());
+            response.put("title", rd.getTitle());
+            response.put("reason", rd.getReason());
+            response.put("amount", rd.getAmount());
+            response.put("effectiveDate", rd.getEffectiveDate());
+            response.put("notes", rd.getNotes());
+            response.put("createdAt", rd.getCreatedAt());
+            response.put("updatedAt", rd.getUpdatedAt());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -59,5 +76,10 @@ public class RewardDisciplineController {
         }
         rewardDisciplineRepository.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public List<RewardDiscipline> getByEmployeeId(@PathVariable Long employeeId) {
+        return rewardDisciplineRepository.findByEmployeeId(employeeId);
     }
 }
