@@ -49,7 +49,7 @@ public class Attendance {
     }
 
     public enum Status {
-        pending, approved, rejected
+        pending, in, out, completed, invalid
     }
 
     // Getters and setters

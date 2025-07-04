@@ -63,6 +63,9 @@ public class SalaryController {
         BigDecimal bonus = salary.getBonus() != null ? salary.getBonus() : BigDecimal.ZERO;
         BigDecimal overtime = salary.getOvertimeSalary() != null ? salary.getOvertimeSalary() : BigDecimal.ZERO;
         BigDecimal deduction = salary.getDeduction() != null ? salary.getDeduction() : BigDecimal.ZERO;
+        BigDecimal hourlyRate = salary.getHourlyRate() != null ? salary.getHourlyRate() : BigDecimal.ZERO;
+        // If you want to use hourlyRate in totalSalary calculation, adjust here. Example:
+        // return basic.add(allowance).add(bonus).add(overtime).add(hourlyRate).subtract(deduction);
         return basic.add(allowance).add(bonus).add(overtime).subtract(deduction);
     }
 }

@@ -46,9 +46,15 @@ public class AttendanceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCheckOut(@PathVariable Long id, @RequestBody Attendance attendance) {
+    public ResponseEntity<?> updateAttendance(@PathVariable Long id, @RequestBody Attendance attendance) {
         return attendanceRepository.findById(id).map(existing -> {
-            existing.setCheckOut(attendance.getCheckOut());
+            if (attendance.getCheckOut() != null) {
+                existing.setCheckOut(attendance.getCheckOut());
+            }
+            if (attendance.getStatus() != null) {
+                existing.setStatus(attendance.getStatus());
+            }
+            // Có thể bổ sung các trường khác nếu cần
             Attendance updated = attendanceRepository.save(existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());
